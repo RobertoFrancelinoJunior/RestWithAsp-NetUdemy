@@ -5,7 +5,6 @@ using RestWithAspNetUdemy.Services;
 namespace RestWithAspNetUdemy.Controllers
 {
     [Route("api/[controller]")]
-    [ApiController]
     public class PersonController : Controller
     {
         private IPersonService personService;
@@ -16,13 +15,13 @@ namespace RestWithAspNetUdemy.Controllers
         }
 
         [HttpGet]
-        public ActionResult Index()
+        public IActionResult Get()
         {
             return Ok(personService.FindAll());
         }
 
         [HttpGet("{id}")]
-        public ActionResult Get(int id)
+        public IActionResult Get(int id)
         {
             var person = personService.FindById(id);
 
