@@ -1,69 +1,90 @@
 ﻿using RestWithAspNetUdemy.Model;
+using RestWithAspNetUdemy.Model.Context;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading;
 
 namespace RestWithAspNetUdemy.Services.Implementations
 {
     public class PersonServiceImplementation : IPersonService
     {
-        private volatile int count;
+        private SqlServerContext sqlServerContext;
 
-        public object InterLocked { get; private set; }
+        public PersonServiceImplementation(SqlServerContext  sqlServerContext)
+        {
+            this.sqlServerContext = sqlServerContext;
+        }
+
+        List<Person> IPersonService.FindAll()
+        {
+            return sqlServerContext.Person.ToList();
+        }
+
+        Person IPersonService.FindById(long id)
+        {
+            return sqlServerContext.Person.SingleOrDefault(person => person.Id.Equals(id));
+        }
 
         Person IPersonService.Create(Person person)
         {
+            try
+            {
+                sqlServerContext.Add(person);
+                sqlServerContext.SaveChanges();
+            }
+            catch(Exception exception)
+            {
+                throw exception;
+            }
+
+            return person;
+        }
+
+        Person IPersonService.Update(Person person)
+        {
+            if(!Exist(person.Id))
+            {
+                return new Person();
+            }
+
+            var result = sqlServerContext.Person.SingleOrDefault(p => p.Id.Equals(person.Id));
+
+            try
+            {
+                sqlServerContext.Entry(result).CurrentValues.SetValues(person);
+                sqlServerContext.SaveChanges();
+            }
+            catch (Exception exception)
+            {
+                throw exception;
+            }
+
             return person;
         }
 
         void IPersonService.Delete(long id)
         {
-        }
+            var result = sqlServerContext.Person.SingleOrDefault(p => p.Id.Equals(id));
 
-        List<Person> IPersonService.FindAll()
-        {
-            List<Person> personList = new List<Person>();
-
-            for(int i = 0; i < 8; i++)
+            try
             {
-                personList.Add(MockPerson(i));
+                if (result != null)
+                { 
+                    sqlServerContext.Person.Remove(result); 
+                }
+                
+                sqlServerContext.SaveChanges();
             }
-
-            return personList;
-        }
-
-        Person IPersonService.FindById(long id)
-        {
-            return new Person
+            catch (Exception exception)
             {
-                 Id = 1,
-                 FirstName = "Roberto",
-                 LastName = "Junior",
-                 Address = "Rua Settimo Giannini 600",
-                 Gender = "Male"
-            };
+                throw exception;
+            }
         }
 
-        Person IPersonService.Update(Person person)
+        private bool Exist(long id)
         {
-            return person;
-        }
-
-        private long IncrementAndGet()
-        {
-            return Interlocked.Increment(ref count);
-        }
-
-        private Person MockPerson(int i)
-        {
-            return new Person
-            {
-                Id = IncrementAndGet(),
-                FirstName = "First Name " + i,
-                LastName = "Last Name " + i,
-                Address = "Same Address " + i,
-                Gender = "Male"
-            };
+            return sqlServerContext.Person.Any(p => p.Id.Equals(id));
         }
     }
 }

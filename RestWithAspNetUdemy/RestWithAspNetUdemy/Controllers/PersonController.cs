@@ -16,7 +16,7 @@ namespace RestWithAspNetUdemy.Controllers
         }
 
         [HttpGet]
-        public ActionResult Index()
+        public ActionResult Get()
         {
             return Ok(personService.FindAll());
         }
@@ -45,7 +45,7 @@ namespace RestWithAspNetUdemy.Controllers
             return new ObjectResult(personService.Create(person));
         }
 
-        [HttpPut("{id}")]
+        [HttpPut]
         public IActionResult Put([FromBody]Person person)
         {
             if (person == null)

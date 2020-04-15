@@ -1,8 +1,10 @@
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using RestWithAspNetUdemy.Model.Context;
 using RestWithAspNetUdemy.Services;
 using RestWithAspNetUdemy.Services.Implementations;
 
@@ -20,6 +22,8 @@ namespace RestWithAspNetUdemy
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            var connection = Configuration["SqlServerConnection:MySqlServerConnectionString"];
+            services.AddDbContext<SqlServerContext>(options => options.UseSqlServer(connection));
             services.AddControllers();
             services.AddScoped<IPersonService, PersonServiceImplementation>();
         }
