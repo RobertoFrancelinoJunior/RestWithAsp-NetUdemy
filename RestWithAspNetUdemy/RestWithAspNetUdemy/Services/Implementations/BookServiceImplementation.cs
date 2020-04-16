@@ -8,36 +8,36 @@ using System.Threading;
 
 namespace RestWithAspNetUdemy.Services.Implementations
 {
-    public class PersonServiceImplementation : IPersonService
+    public class BookServiceImplementation : IBookService
     {
-        private IRepository<Person> repository;
+        private IRepository<Book> repository;
 
-        public PersonServiceImplementation(IRepository<Person> repository)
+        public BookServiceImplementation(IRepository<Book> repository)
         {
             this.repository = repository;
         }
 
-        List<Person> IPersonService.FindAll()
+        List<Book> IBookService.FindAll()
         {
             return repository.FindAll();
         }
 
-        Person IPersonService.FindById(long id)
+        Book IBookService.FindById(long id)
         {
             return repository.FindById(id);
         }
 
-        Person IPersonService.Create(Person person)
+        Book IBookService.Create(Book book)
         {
-            return repository.Create(person);
+            return repository.Create(book);
         }
 
-        Person IPersonService.Update(Person person)
+        Book IBookService.Update(Book book)
         {
-            return repository.Update(person);
+            return repository.Update(book);
         }
 
-        void IPersonService.Delete(long id)
+        void IBookService.Delete(long id)
         {
             repository.Delete(id);
         }

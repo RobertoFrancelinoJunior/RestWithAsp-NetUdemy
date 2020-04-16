@@ -7,25 +7,25 @@ namespace RestWithAspNetUdemy.Controllers
     [ApiVersion("1")]
     [Route("api/v{version:apiVersion}/[controller]")]
     [ApiController]
-    public class PersonController : Controller
+    public class BookController : Controller
     {
-        private IPersonService personService;
+        private IBookService bookService;
 
-        public PersonController(IPersonService personService)
+        public BookController(IBookService bookService)
         {
-            this.personService = personService;
+            this.bookService = bookService;
         }
 
         [HttpGet]
         public ActionResult Get()
         {
-            return Ok(personService.FindAll());
+            return Ok(bookService.FindAll());
         }
 
         [HttpGet("{id}")]
         public ActionResult Get(int id)
         {
-            var person = personService.FindById(id);
+            var person = bookService.FindById(id);
 
             if (person == null)
             {
@@ -36,31 +36,31 @@ namespace RestWithAspNetUdemy.Controllers
         }
 
         [HttpPost]
-        public IActionResult Post([FromBody]Person person)
+        public IActionResult Post([FromBody]Book book)
         {
-            if (person == null)
+            if (book == null)
             {
                 return BadRequest();
             }
 
-            return new ObjectResult(personService.Create(person));
+            return new ObjectResult(bookService.Create(book));
         }
 
         [HttpPut]
-        public IActionResult Put([FromBody]Person person)
+        public IActionResult Put([FromBody]Book book)
         {
-            if (person == null)
+            if (book == null)
             {
                 return BadRequest();
             }
 
-            return new ObjectResult(personService.Update(person));
+            return new ObjectResult(bookService.Update(book));
         }
 
         [HttpDelete("{id}")]
         public IActionResult Delete(int id)
         {
-            personService.Delete(id);
+            bookService.Delete(id);
             return NoContent();
         }
     }
