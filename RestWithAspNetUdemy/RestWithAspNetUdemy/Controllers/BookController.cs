@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using RestWithAspNetUdemy.Model;
 using RestWithAspNetUdemy.Services;
 
@@ -17,6 +18,7 @@ namespace RestWithAspNetUdemy.Controllers
         }
 
         [HttpGet]
+        [Authorize("Bearer")]
         public ActionResult Get()
         {
             return Ok(bookService.FindAll());

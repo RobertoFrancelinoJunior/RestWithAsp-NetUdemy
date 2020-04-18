@@ -1,8 +1,4 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace RestWithAspNetUdemy.Model.Context
 {
@@ -13,6 +9,10 @@ namespace RestWithAspNetUdemy.Model.Context
         public SqlServerContext(DbContextOptions<SqlServerContext> options) : base(options) { }
 
         public DbSet<Person> Person { get; set; }
+
         public DbSet<Book> Book { get; set; }
+
+        public DbSet<User> User { get; set; }
+
     }
 }
