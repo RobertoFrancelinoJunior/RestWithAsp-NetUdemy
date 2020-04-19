@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using RestWithAspNetUdemy.Model;
 using RestWithAspNetUdemy.Services;
+using System.Collections.Generic;
 
 namespace RestWithAspNetUdemy.Controllers
 {
@@ -18,6 +19,11 @@ namespace RestWithAspNetUdemy.Controllers
         }
 
         [HttpGet]
+        [ProducesResponseType(typeof(IEnumerable<Book>), 200)]
+        [ProducesResponseType(typeof(IEnumerable<Book>), 204)]
+        [ProducesResponseType(typeof(IDictionary<string, string>), 400)]
+        [ProducesResponseType(typeof(IDictionary<string, string>), 401)]
+        [ProducesResponseType(500)]
         [Authorize("Bearer")]
         public ActionResult Get()
         {

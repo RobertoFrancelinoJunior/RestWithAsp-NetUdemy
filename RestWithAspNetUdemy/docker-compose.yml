@@ -1,0 +1,32 @@
+version: '3.4'
+
+services:
+  db:
+    image: "mcr.microsoft.com/mssql/server"
+    environment:
+      SA_PASSWORD: "n6oXgueQSAVPkoZQ0Nc6+M11fWtYJ9w47bRk26VgDZE="
+      ACCEPT_EULA: "Y"
+    volumes:
+      - type: bind
+        source: ./DBBackup/backup.sql
+        target: /docker-entrypoint-initdb.d/backup.sql
+    ports:
+      - "6062:1433"
+    networks:
+      - udemy-network
+  restwithaspnetudemy:
+    image: restwithaspnetudemy-api
+    build:
+      context: .
+      dockerfile: RestWithAspNetUdemy/Dockerfile
+   
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+    ports:
+      - "8063:80"
+    networks:
+      - udemy-network
+
+networks:
+  udemy-network:
+    driver: bridge
